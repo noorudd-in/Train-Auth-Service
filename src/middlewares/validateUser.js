@@ -62,7 +62,7 @@ const validateUserRegistration = (req, res, next) => {
       error: "Invalid request.",
     });
   }
-  if (String(req.body.phone_number).length != 10) {
+  if (req.body.phone_number.length != 10) {
     return res.status(client.BAD_REQUEST).json({
       data: null,
       message: "Phone number must be 10 digits",

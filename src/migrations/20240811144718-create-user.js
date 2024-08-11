@@ -32,8 +32,11 @@ module.exports = {
         }
       },
       phone_number: {
-        type: Sequelize.INTEGER,
-        allowNull: false
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+          len: [10, 10],
+        }
       },
       createdAt: {
         allowNull: false,
