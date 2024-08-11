@@ -2,7 +2,6 @@ const { User } = require("../models/index");
 
 class UserRepository {
   async createUser(data) {
-    console.log('Data', data)
     try {
       const user = await User.create(data);
       return user;

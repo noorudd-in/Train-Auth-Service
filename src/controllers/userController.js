@@ -5,14 +5,7 @@ const userService = new UserService();
 
 const createUser = async (req, res) => {
   try {
-    const user = await userService.createUser(
-      {
-        fullName: req.body.fullName,
-        email: req.body.email,
-        password: req.body.password,
-        phone_number: req.body.phone_number
-      }
-    );
+    const user = await userService.createUser(req.body);
     return res.status(success.CREATED).json({
       data: user,
       success: true,
