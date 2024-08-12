@@ -43,6 +43,11 @@ module.exports = (sequelize, DataTypes) => {
           len: [10, 10],
         }
       },
+      role: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: 'user',
+      },
     },
     {
       sequelize,

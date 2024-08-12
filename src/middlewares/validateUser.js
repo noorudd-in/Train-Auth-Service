@@ -62,7 +62,7 @@ const validateUserRegistration = (req, res, next) => {
       error: "Invalid request.",
     });
   }
-  if (req.body.phone_number.length != 10) {
+  if (String(req.body.phone_number).length != 10) {
     return res.status(client.BAD_REQUEST).json({
       data: null,
       message: "Phone number must be 10 digits",
@@ -74,6 +74,28 @@ const validateUserRegistration = (req, res, next) => {
   next()
 };
 
+const validateUserLogin = (req, res, next) => {
+  if (!req.body.email) {
+    return res.status(client.BAD_REQUEST).json({
+      data: null,
+      message: "Email is required.",
+      success: false,
+      error: "Invalid request.",
+    });
+  }
+  if (!req.body.password) {
+    return res.status(client.BAD_REQUEST).json({
+      data: null,
+      message: "Password is required.",
+      success: false,
+      error: "Invalid request.",
+    });
+  }
+  
+  next();
+}
+
 module.exports = {
-  validateUserRegistration
+  validateUserRegistration,
+  validateUserLogin
 }

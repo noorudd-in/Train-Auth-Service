@@ -1,4 +1,4 @@
-const UserService  = require("../services/userService");
+const UserService = require("../services/userService");
 const { success, client, server } = require("../utils/statusCodes");
 
 const userService = new UserService();
@@ -7,9 +7,14 @@ const createUser = async (req, res) => {
   try {
     const user = await userService.createUser(req.body);
     return res.status(success.CREATED).json({
-      data: user,
+      data: {
+        id: user.id,
+        fullName: user.fullName,
+        email: user.email,
+        phone_number: user.phone_number,
+      },
       success: true,
-      message: "User created successfully.",
+      message: "User created successfully. You can login now.",
       error: {},
     });
   } catch (error) {
@@ -123,10 +128,61 @@ const getAllUser = async (req, res) => {
   }
 };
 
+const loginUser = async (req, res) => {
+  console.log(req.body);
+  try {
+    const user = await userService.getUserByEmail(req.body.email);
+    if (!user) {
+      return res.status(client.UNAUTHORISED).json({
+        data: {},
+        success: true,
+        message: "Email or password is incorrect.",
+        error: "User is not authenticated.",
+      });
+    }
+    const checkPassword = userService.verifyPassword(
+      req.body.password,
+      user.password
+    );
+    
+    if (!checkPassword) {
+      return res.status(client.UNAUTHORISED).json({
+        data: {},
+        success: true,
+        message: "Email or password is incorrect.",
+        error: "User is not authenticated.",
+      });
+    }
+    const authToken = userService.createToken({
+      id: user.id,
+      email: user.email,
+    });
+    return res.status(success.OK).json({
+      data: {
+        id: user.id,
+        email: user.email,
+        authToken: authToken,
+      },
+      success: true,
+      message: "User logged in successfully.",
+      error: {},
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(server.INTERNAL_SERVER_ERROR).json({
+      data: null,
+      success: false,
+      message: "Cannot login user.",
+      error: error,
+    });
+  }
+};
+
 module.exports = {
   createUser,
   updateUser,
   deleteUser,
   getUser,
   getAllUser,
+  loginUser,
 };

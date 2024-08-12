@@ -7,11 +7,13 @@ const {
   deleteUser,
   getUser,
   getAllUser,
+  loginUser
 } = require("../../controllers/userController");
-const { validateUserRegistration } = require("../../middlewares/validateUser");
+const { validateUserRegistration, validateUserLogin } = require("../../middlewares/validateUser");
 
 // Register a user
 router.post("/register", validateUserRegistration, createUser);
+router.post('/login', validateUserLogin, loginUser)
 
 // Update, Delete or Fetch User details [Only for Admin]
 router.patch("/user/:id", updateUser);
