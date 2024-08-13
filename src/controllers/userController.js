@@ -129,7 +129,6 @@ const getAllUser = async (req, res) => {
 };
 
 const loginUser = async (req, res) => {
-  console.log(req.body);
   try {
     const user = await userService.getUserByEmail(req.body.email);
     if (!user) {
@@ -178,6 +177,38 @@ const loginUser = async (req, res) => {
   }
 };
 
+const getProfile = async (req, res) => {
+  try {
+    const user = await userService.getUser(req.params.id);
+    if (!user) {
+      return res.status(client.NOT_FOUND).json({
+        data: null,
+        success: false,
+        message: "User you specified doesn't exist!",
+        error: {},
+      });
+    }
+    return res.status(success.OK).json({
+      data: {
+        id: user.id,
+        email: user.email,
+        phone_number: user.phone_number,
+        role: user.role
+      },
+      success: true,
+      message: "User fetched successfully.",
+      error: {},
+    });
+  } catch (error) {
+    res.status(server.INTERNAL_SERVER_ERROR).json({
+      data: null,
+      success: false,
+      message: "Cannot fetch the user.",
+      error: error,
+    });
+  }
+}
+
 module.exports = {
   createUser,
   updateUser,
@@ -185,4 +216,5 @@ module.exports = {
   getUser,
   getAllUser,
   loginUser,
+  getProfile
 };

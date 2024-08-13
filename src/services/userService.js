@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const bcrypt = require('bcrypt')
+const bcrypt = require("bcrypt");
 const UserRepository = require("../repositories/userRepository");
 const { JWT_PRIVATE_KEY } = require("../config/constants");
 
@@ -58,8 +58,8 @@ class UserService {
       console.log(error);
     }
   }
-  
-  async getUserByEmail (userEmail) {
+
+  async getUserByEmail(userEmail) {
     try {
       const user = await this.userRepository.getUserByEmail(userEmail);
       return user;
@@ -71,20 +71,32 @@ class UserService {
 
   verifyPassword = (plainPassword, hashPassword) => {
     try {
-      return bcrypt.compareSync(plainPassword, hashPassword)
+      return bcrypt.compareSync(plainPassword, hashPassword);
     } catch (error) {
       console.log("Password matching failed!");
       console.log(error);
     }
-  }
+  };
 
   createToken = (userObject) => {
     try {
-      const authToken = jwt.sign(userObject, JWT_PRIVATE_KEY, {expiresIn: '3d'});
+      const authToken = jwt.sign(userObject, JWT_PRIVATE_KEY, {
+        expiresIn: "3d",
+      });
       return authToken;
     } catch (error) {
       console.log("Token cannot be generated.");
       console.log(error);
+    }
+  };
+
+  verifyToken = (data) => {
+    try {
+      const userObject = jwt.verify(data, JWT_PRIVATE_KEY);
+      return { data: userObject, error: null };
+    } catch (error) {
+      console.log("Cannot verify token");
+      return { data: null, error: error };
     }
   };
 }
