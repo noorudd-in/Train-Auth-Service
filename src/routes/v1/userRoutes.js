@@ -8,21 +8,27 @@ const {
   getUser,
   getAllUser,
   loginUser,
-  getProfile
+  getProfile,
 } = require("../../controllers/userController");
-const { validateUserRegistration, validateUserLogin, isUser } = require("../../middlewares/validateUser");
+
+const {
+  validateUserLogin,
+  validateUserRegistration,
+  isAdmin,
+  isUser
+} = require("../../middlewares/index");
 
 // Register & Login a user
 router.post("/register", validateUserRegistration, createUser);
-router.post('/login', validateUserLogin, loginUser)
+router.post("/login", validateUserLogin, loginUser);
 
 // Fetch user profile (after authentication)
-router.get('/profile/:id', isUser, getProfile);
+router.get("/profile/:id", isUser, getProfile);
 
 // Update, Delete or Fetch User details [Only for Admin]
-router.patch("/user/:id", updateUser);
-router.delete("/user/:id", deleteUser);
-router.get("/user/:id", getUser);
-router.get("/users", getAllUser);
+router.patch("/user/:id", isAdmin, updateUser);
+router.delete("/user/:id", isAdmin, deleteUser);
+router.get("/user/:id", isAdmin, getUser);
+router.get("/users", isAdmin, getAllUser);
 
 module.exports = router;

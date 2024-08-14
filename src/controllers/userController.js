@@ -6,6 +6,14 @@ const userService = new UserService();
 const createUser = async (req, res) => {
   try {
     const user = await userService.createUser(req.body);
+    if (user.success == false) {
+      return res.status(server.INTERNAL_SERVER_ERROR).json({
+        data: null,
+        success: false,
+        message: user.message,
+        error: user.error,
+      });
+    }
     return res.status(success.CREATED).json({
       data: {
         id: user.id,
@@ -30,7 +38,7 @@ const createUser = async (req, res) => {
 const updateUser = async (req, res) => {
   try {
     const user = await userService.updateUser(req.params.id, req.body);
-    if (!user) {
+    if (!user || user[0] == 0) {
       return res.status(client.NOT_FOUND).json({
         data: user,
         success: false,

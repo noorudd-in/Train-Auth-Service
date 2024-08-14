@@ -8,6 +8,12 @@ class UserRepository {
     } catch (error) {
       console.log("Something went wrong in the repository layer");
       console.log(error);
+      return {
+        data: null,
+        message: error.errors[0].message,
+        success: false,
+        error: error.name
+      };
     }
   }
 
@@ -32,6 +38,10 @@ class UserRepository {
           id: userId,
         },
       });
+      if (!user) {
+        return false;
+      }
+      return true;
     } catch (error) {
       console.log("Something went wrong in the repository layer");
       console.log(error);
