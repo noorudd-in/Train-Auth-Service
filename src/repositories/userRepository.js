@@ -10,7 +10,7 @@ class UserRepository {
       console.log(error);
       return {
         data: null,
-        message: error.errors[0].message,
+        message: error.message,
         success: false,
         error: error.name
       };
