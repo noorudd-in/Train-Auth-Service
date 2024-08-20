@@ -62,6 +62,7 @@ module.exports = (sequelize, DataTypes) => {
     const hashedPassword = await hashPassword(user.password);
     user.password = hashedPassword;
     user.role = 'user';
+    user.is_verified = null
   })
   return User;
 };

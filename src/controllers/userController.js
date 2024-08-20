@@ -22,7 +22,7 @@ const createUser = async (req, res) => {
         phone_number: user.phone_number,
       },
       success: true,
-      message: "User created successfully. You can login now.",
+      message: "User registered. Please check your email to verify your account.",
       error: {},
     });
   } catch (error) {
@@ -141,8 +141,8 @@ const loginUser = async (req, res) => {
     const user = await userService.getUserByEmail(req.body.email);
     if (!user) {
       return res.status(client.UNAUTHORISED).json({
-        data: {},
-        success: true,
+        data: null,
+        success: false,
         message: "Email or password is incorrect.",
         error: "User is not authenticated.",
       });
@@ -154,10 +154,18 @@ const loginUser = async (req, res) => {
     
     if (!checkPassword) {
       return res.status(client.UNAUTHORISED).json({
-        data: {},
-        success: true,
+        data: null,
+        success: false,
         message: "Email or password is incorrect.",
         error: "User is not authenticated.",
+      });
+    }
+    if (!user.is_verified) {
+      return res.status(client.UNAUTHORISED).json({
+        data: null,
+        success: false,
+        message: "Verify you email address before login.",
+        error: "Email not verified.",
       });
     }
     const authToken = userService.createToken({
@@ -172,7 +180,7 @@ const loginUser = async (req, res) => {
       },
       success: true,
       message: "User logged in successfully.",
-      error: {},
+      error: null,
     });
   } catch (error) {
     console.log(error);
