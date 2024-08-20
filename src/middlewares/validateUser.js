@@ -95,8 +95,21 @@ const validateVerifyEmail = (req, res, next) => {
   next();
 };
 
+const validateResendEmailVerify  = (req, res, next) => {
+  if (!req.body.email) {
+    return res.status(client.BAD_REQUEST).json({
+      data: null,
+      message: "Email is required.",
+      success: false,
+      error: "Invalid request.",
+    });
+  }
+  next()
+}
+
 module.exports = {
   validateUserRegistration,
   validateUserLogin,
   validateVerifyEmail,
+  validateResendEmailVerify
 };

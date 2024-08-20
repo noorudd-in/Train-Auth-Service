@@ -1,7 +1,8 @@
 const {
   validateUserRegistration,
   validateUserLogin,
-  validateVerifyEmail
+  validateVerifyEmail,
+  validateResendEmailVerify
 } = require("./validateUser");
 const { isAdmin, isUser } = require("./authValidation");
 module.exports = {
@@ -9,5 +10,6 @@ module.exports = {
     validateUserLogin,
     isAdmin,
     isUser,
-    validateVerifyEmail
+    validateVerifyEmail,
+    validateResendEmailVerify
 };

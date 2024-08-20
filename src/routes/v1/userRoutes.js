@@ -9,7 +9,8 @@ const {
   getAllUser,
   loginUser,
   getProfile,
-  verifyEmail
+  verifyEmail,
+  resendEmail
 } = require("../../controllers/userController");
 
 const {
@@ -17,7 +18,8 @@ const {
   validateUserRegistration,
   isAdmin,
   isUser,
-  validateVerifyEmail
+  validateVerifyEmail,
+  validateResendEmailVerify
 } = require("../../middlewares/index");
 
 // Register & Login a user
@@ -35,5 +37,7 @@ router.get("/users", isAdmin, getAllUser);
 
 // Verify Email Address
 router.get('/auth/verify-email', validateVerifyEmail, verifyEmail)
+// Resend Email Verification
+router.post('/resend-verification-email', validateResendEmailVerify, resendEmail)
 
 module.exports = router;
