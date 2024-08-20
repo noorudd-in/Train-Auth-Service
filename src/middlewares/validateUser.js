@@ -1,7 +1,7 @@
 const { client } = require("../utils/statusCodes");
 
 const validateUserRegistration = (req, res, next) => {
-  if (!req.body.fullName) {
+  if (!req.body.full_name) {
     return res.status(client.BAD_REQUEST).json({
       data: null,
       message: "Full name is required.",
@@ -29,14 +29,6 @@ const validateUserRegistration = (req, res, next) => {
     return res.status(client.BAD_REQUEST).json({
       data: null,
       message: "Phone number is required.",
-      success: false,
-      error: "Invalid request.",
-    });
-  }
-  if (req.body.fullName.length < 3) {
-    return res.status(client.BAD_REQUEST).json({
-      data: null,
-      message: "Full name cannot be less than 3 characters.",
       success: false,
       error: "Invalid request.",
     });
