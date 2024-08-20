@@ -9,13 +9,15 @@ const {
   getAllUser,
   loginUser,
   getProfile,
+  verifyEmail
 } = require("../../controllers/userController");
 
 const {
   validateUserLogin,
   validateUserRegistration,
   isAdmin,
-  isUser
+  isUser,
+  validateVerifyEmail
 } = require("../../middlewares/index");
 
 // Register & Login a user
@@ -30,5 +32,8 @@ router.patch("/user/:id", isAdmin, updateUser);
 router.delete("/user/:id", isAdmin, deleteUser);
 router.get("/user/:id", isAdmin, getUser);
 router.get("/users", isAdmin, getAllUser);
+
+// Verify Email Address
+router.get('/auth/verify-email', validateVerifyEmail, verifyEmail)
 
 module.exports = router;

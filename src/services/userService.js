@@ -77,10 +77,10 @@ class UserService {
     }
   };
 
-  createToken = (userObject) => {
+  createToken = (userObject, duration) => {
     try {
       const authToken = jwt.sign(userObject, JWT_PRIVATE_KEY, {
-        expiresIn: "3d",
+        expiresIn: duration,
       });
       return authToken;
     } catch (error) {

@@ -1,4 +1,5 @@
 const { client } = require("../utils/statusCodes");
+const { invalidToken } = require("../utils/htmlResponse");
 
 const validateUserRegistration = (req, res, next) => {
   if (!req.body.full_name) {
@@ -87,7 +88,15 @@ const validateUserLogin = (req, res, next) => {
   next();
 };
 
+const validateVerifyEmail = (req, res, next) => {
+  if (!req.query.token) {
+    return res.status(client.BAD_REQUEST).send(invalidToken);
+  }
+  next();
+};
+
 module.exports = {
   validateUserRegistration,
   validateUserLogin,
+  validateVerifyEmail,
 };

@@ -1,5 +1,8 @@
 const UserService = require("../services/userService");
 const { success, client, server } = require("../utils/statusCodes");
+const sendEmail = require("../utils/sendVerifyEmail");
+const { BASE_URL } = require("../config/constants");
+const { invalidToken, emailAlreadyVerified, emailVerified } = require("../utils/htmlResponse");
 
 const userService = new UserService();
 
@@ -14,6 +17,17 @@ const createUser = async (req, res) => {
         error: user.error,
       });
     }
+    const authToken = userService.createToken(
+      {
+        id: user.id,
+      },
+      '2h'
+    );
+    sendEmail(
+      user.email,
+      user.full_name,
+      `${BASE_URL}/api/v1/auth/verify-email?token=${authToken}`
+    );
     return res.status(success.CREATED).json({
       data: {
         id: user.id,
@@ -22,7 +36,8 @@ const createUser = async (req, res) => {
         phone_number: user.phone_number,
       },
       success: true,
-      message: "User registered. Please check your email to verify your account.",
+      message:
+        "User registered. Please check your email to verify your account.",
       error: {},
     });
   } catch (error) {
@@ -151,7 +166,7 @@ const loginUser = async (req, res) => {
       req.body.password,
       user.password
     );
-    
+
     if (!checkPassword) {
       return res.status(client.UNAUTHORISED).json({
         data: null,
@@ -168,10 +183,13 @@ const loginUser = async (req, res) => {
         error: "Email not verified.",
       });
     }
-    const authToken = userService.createToken({
-      id: user.id,
-      email: user.email,
-    });
+    const authToken = userService.createToken(
+      {
+        id: user.id,
+        email: user.email,
+      },
+      "3d"
+    );
     return res.status(success.OK).json({
       data: {
         id: user.id,
@@ -209,7 +227,7 @@ const getProfile = async (req, res) => {
         id: user.id,
         email: user.email,
         phone_number: user.phone_number,
-        role: user.role
+        role: user.role,
       },
       success: true,
       message: "User fetched successfully.",
@@ -223,7 +241,26 @@ const getProfile = async (req, res) => {
       error: error,
     });
   }
-}
+};
+
+const verifyEmail = async (req, res) => {
+  const result = userService.verifyToken(req.query.token);
+  if (!result.data) {
+    return res.status(client.BAD_REQUEST).send(invalidToken);
+  }
+  const user = await userService.getUser(result.data.id);
+  if (!user) {
+    return res.status(client.BAD_REQUEST).send(invalidToken);
+  }
+  if (user.is_verified) {
+    return res.status(success.OK).send(emailAlreadyVerified);
+  } else {
+    const updatedUser = await userService.updateUser(user.id, {
+      is_verified: true
+    })
+    return res.status(success.OK).send(emailVerified);
+  }
+};
 
 module.exports = {
   createUser,
@@ -232,5 +269,6 @@ module.exports = {
   getUser,
   getAllUser,
   loginUser,
-  getProfile
+  getProfile,
+  verifyEmail,
 };
