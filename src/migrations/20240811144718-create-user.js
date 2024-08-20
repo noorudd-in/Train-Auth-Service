@@ -43,6 +43,9 @@ module.exports = {
         allowNull: false,
         defaultValue: 'user',
       },
+      is_verified: {
+        type: Sequelize.STRING,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

@@ -48,6 +48,9 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         defaultValue: 'user',
       },
+      is_verified: {
+        type: DataTypes.STRING,
+      },
     },
     {
       sequelize,
