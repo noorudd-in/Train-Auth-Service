@@ -36,7 +36,7 @@ router.get("/user/:id", isAdmin, getUser);
 router.get("/users", isAdmin, getAllUser);
 
 // Verify Email Address
-router.get('/auth/verify-email', validateVerifyEmail, verifyEmail)
+router.get('/verify-email', validateVerifyEmail, verifyEmail)
 // Resend Email Verification
 router.post('/resend-verification-email', validateResendEmailVerify, resendEmail)
 

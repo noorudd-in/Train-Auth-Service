@@ -30,7 +30,7 @@ const createUser = async (req, res) => {
     sendEmail(
       user.email,
       user.full_name,
-      `${BASE_URL}/api/v1/auth/verify-email?token=${authToken}`
+      `${BASE_URL}/auth/api/v1/verify-email?token=${authToken}`
     );
     return res.status(success.CREATED).json({
       data: {
@@ -284,7 +284,7 @@ const resendEmail = async (req, res) => {
       sendEmail(
         user.email,
         user.full_name,
-        `${BASE_URL}/api/v1/auth/verify-email?token=${authToken}`
+        `${BASE_URL}/auth/api/v1/verify-email?token=${authToken}`
       );
     }
     return res.status(success.OK).json({
