@@ -229,6 +229,7 @@ const getProfile = async (req, res) => {
     return res.status(success.OK).json({
       data: {
         id: user.id,
+        full_name: user.full_name,
         email: user.email,
         phone_number: user.phone_number,
         role: user.role,

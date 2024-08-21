@@ -1,14 +1,5 @@
-const fs = require("fs");
-const path = require("path");
 const transporter = require("../config/mailer");
 const {verifyEmailBody} = require('../utils/htmlResponse')
-
-/*
-const emailTemplate = fs.readFileSync(
-  path.join(__dirname, "verifyEmail.html"),
-  "utf8"
-);
-*/
 
 function sendVerificationEmail(to, fullName, verificationUrl) {
   const emailBody = verifyEmailBody
